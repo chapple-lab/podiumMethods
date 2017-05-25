@@ -1,0 +1,6 @@
+stopLog <-
+function()
+{
+	warnings()
+	sink()
+}
