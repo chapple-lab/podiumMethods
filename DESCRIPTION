@@ -8,3 +8,4 @@ Depends: R (>= 2.14.0), methods, coleXcms (>= 1.1.0)
 Description: Contains methods that are not directly involved in modifying/extending XCMS (ie. non-xcmsSet2 specific methods).  These methods will eventually get merged
 			 together with the coleXcms package.
 License: GPL (>= 2)
+LazyData: true
