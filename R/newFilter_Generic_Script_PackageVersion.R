@@ -18,7 +18,9 @@ Log=T
 Append=F
 
 ##Minimize retained data? If = 1 will just remove setList, if = 2 will remove dataSet and setList
+##SaveData, 0 = do not save, 1=save final dataSet2, 2=save dataSet and dataSet2
 datMin=1
+saveData =1
 readRawData=T
 
 ##Set Run Mode
@@ -316,16 +318,35 @@ for(phenoTag in runList)
     report = diffreport2(dataSet2,resultsPath,type,tTestFilter,phenoTag,filebase=file.path(resultsPath,paste(phenoTag,diffval,"StatResults",sep="_")),eicmax=100,dataVal=val,value=diffval)
   }
 
-  cat("\nFinished Processing Phenotype:",phenoTag,"\n\n")
+  cat("\n----Finished Processing Phenotype:",phenoTag,"----\n\n")
+  print(Sys.time())
+  cat("\n")
   if(!(comparison|multi))
     resultsPath=baseResultsPath
 }
 
-cat("\nAnalysis Complete\n")
+cat("\n----Analysis Complete----\n")
+print(Sys.time())
+cat("\n")
 
 if(datMin>=1)
   {rm(setList)
   gc()}
+
+if(saveData>=2&datMin<=1)
+{
+  save(dataSet,file.path(resultsPath,"dataSet.RData"))
+  save(dataSet2,file.path(resultsPath,"dataSet2.RData"))
+  cat("\n----Data Save Complete----\n")
+  print(Sys.time())
+  cat("\n")
+}else if(saveData>=1)
+{
+  save(dataSet2,file.path(resultsPath,"dataSet2.RData"))
+  cat("\n----Data Save Complete----\n")
+  print(Sys.time())
+  cat("\n")
+}
 
 if(Log)
   stopLog()
