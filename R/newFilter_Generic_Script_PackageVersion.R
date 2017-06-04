@@ -38,7 +38,10 @@ if(comparison&multi)
 ##of the folders in the highest level of the start directory.  (ie. must match phenotypes contained in the first row
 ##of the xcmsSet @phenoData slot). eg. phenos=c("ref3-3","fah1-2","cadC/D")
 ##NOTE: This parameter is ignored if running in single/batch mode. (will run all of them automatically)
+## if shortPheno is not set to NULL, shortPheno will be used in place of phenoTag when running All phenotypes
+#this is to help prevent overly long file names when running many phenotypes at once
 selectedPhenos = c("All")
+shortPheno = NULL
 
 ##Use Statistical or Heuristic Based Pairing Algorithm (P)? Use Statistical or Heuristic Based Validation Algorithm (V)?
 tTestPairing = T
@@ -131,7 +134,9 @@ if("12C"%in%phenotypes | "13C"%in%phenotypes) #if only one phenotype, generate p
     if(comparison&(length(phenotypes)>2|length(phenotypes)==1))
       stop("Error: Incorrect number of phenotypes selected.  Comparison mode requires excatly two phenotypes.")
 
-    phenoTag = paste(phenotypes,collapse="_")
+    if(is.null(shortPheno))
+          phenoTag = paste(phenotypes,collapse="_") else
+            phenoTag = shortPheno
   }else{
     #Select desired phenotypes
     #first check to ensure all selected phenotypes have been detected
@@ -319,7 +324,7 @@ for(phenoTag in runList)
   }
 
   cat("\n----Finished Processing Phenotype:",phenoTag,"----\n\n")
-  print(Sys.time())
+  print(proc.time())
   cat("\n")
   if(!(comparison|multi))
     resultsPath=baseResultsPath
@@ -327,6 +332,8 @@ for(phenoTag in runList)
 
 cat("\n----Analysis Complete----\n")
 print(Sys.time())
+cat("\n")
+print(proc.time())
 cat("\n")
 
 if(datMin>=1)
@@ -340,11 +347,15 @@ if(saveData>=2&datMin<=1)
   cat("\n----Data Save Complete----\n")
   print(Sys.time())
   cat("\n")
+  print(proc.time())
+  cat("\n")
 }else if(saveData>=1)
 {
   save(dataSet2,file.path(resultsPath,"dataSet2.RData"))
   cat("\n----Data Save Complete----\n")
   print(Sys.time())
+  cat("\n")
+  print(proc.time())
   cat("\n")
 }
 
