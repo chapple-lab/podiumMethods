@@ -17,20 +17,20 @@ function(xcmsSet2,mLabel=1.0033548,nLabel=6,mzppm=15,mzabs=0.005,rterror=1,resul
   # filledSet = fillPeaks(xcmsSet2,"chrom",nSlaves=8,expand.mz=1,expand.rt=1,min.width.mz=0.005,min.width.rt=1)
   gpvals = groupval(xcmsSet2,method="medret",value=value)
   #   rownames(groups)<-groupnames(xcmsSet2) ##set group Id tags as row names
-  groupsplusNmzrange<-groupmzrange(groups,mzppm,mzabs,nC13=6) #add uppermz and lowermz of M+6 for each group
-  plusN<-findC13cmpd_stat(groupsplusNmzrange,rterror) #find M+6 C13 peaks
-  #   plus6out <<-plus6
+  groupsplusNmzrange<-groupmzrange(groups,mzppm,mzabs,nLabel=nLabel,mLabel=mLabel) #add uppermz and lowermz of M+6 for each group
+  plusN<-findLablcmpd_stat(groupsplusNmzrange,rterror) #find M+6 C13 peaks
+
 
   ##--parameter optimization
-  groupsplus12mzrange<-groupmzrange(groups,mzppm,mzabs,nC13=12) #add uppermz and lowermz of M+12 for each peak
-  plus12<-findC13cmpd_stat(groupsplus12mzrange,rterror)
+  groupsplus2Nmzrange<-groupmzrange(groups,mzppm,mzabs,nC13=12) #add uppermz and lowermz of M+12 for each peak
+  plus2N<-findLablcmpd_stat(groupsplus2Nmzrange,rterror)
   #optimize mzppm and mzabs so serialpath is identical to parallelpath
   conflictpair6<-sum(duplicated(plusN[,"M"]))+sum(duplicated(plusN[,"Mplus"])) ##determine number of peaks that occur multiple times in the same list (M list or M+6), does NOT look at multiple occurrences across lists  (ie. One in both M and M+6 does NOT count)
-  conflictpair12<-sum(duplicated(plus12[,"M"]))+sum(duplicated(plus12[,"Mplus"])) ##repeat above for +12 path
+  conflictpair12<-sum(duplicated(plus2N[,"M"]))+sum(duplicated(plus2N[,"Mplus"])) ##repeat above for +12 path
   cat("conflictpair6: ",conflictpair6,"\n","conflictpair12: ",conflictpair12, "\n")
   cat("If any conflictpair is non-zero, reduce rterror or mzerror. \n")
   serialpath<-plusN[which(plusN[,"Mplus"] %in% intersect(plusN[,"M"],plusN[,"Mplus"])),"M"] #M -> M+6 -> M+12 ##Return M peaks for Mplus peaks that are found in both M and Mplus cols (should represent M->M6->m12). Will fail if one M peak mapps to two distinct Mplus peaks
-  parallelpath<-intersect(plusN[,"M"],plus12[,"M"]) #M -> M+6; M -> M+12 ##Returns all M peaks that are in both plusN and plus12 M list
+  parallelpath<-intersect(plusN[,"M"],plus2N[,"M"]) #M -> M+6; M -> M+12 ##Returns all M peaks that are in both plusN and plus2N M list
   cat("Results from two paths are identical?", setequal(serialpath,parallelpath),"\n") #If FALSE, increase the rterror or mzerror.
   ##---end parameter optimization
 
@@ -83,14 +83,14 @@ function(xcmsSet2,mLabel=1.0033548,nLabel=6,mzppm=15,mzabs=0.005,rterror=1,resul
       rtmin<-min(as.numeric(C12peak[x,"rtmed_M"]),as.numeric(plusN[idx,"rtmed_M"]),as.numeric(plusN[idx[l],"rtmed_Mplus"])) ##idx[L], calculate min rt for group
       rtmax<-max(as.numeric(C12peak[x,"rtmed_M"]),as.numeric(plusN[idx,"rtmed_M"]),as.numeric(plusN[idx,"rtmed_Mplus"])) ##idx[L], calculate max rt for group
       gp<-c(C12peak[x,"M"],unique(plusN[idx,"M"]),plusN[idx[l],"Mplus"],C12peak[x,"mzmed_M"],unique(plusN[idx,"mzmed_M"]),plusN[idx[l],"mzmed_Mplus"],rtmin,rtmax) #group peaks for return, Group is base peak, all peaks in Idx, and the +6 Peak of the last peak in Idx
-      nc13gps = length(unique(plusN[idx,"M"]))
-      names(gp)<-c("12C",paste("13C_",seq(6,(nc13gps+1)*6,6),sep=""),"12C_mz",paste("13C_",seq(6,(nc13gps+1)*6,6),"_mz",sep=""),"rtmedmin","rtmedmax") #add identifiers to each peak in the group and label columns
+      nLablgps = length(unique(plusN[idx,"M"]))
+      names(gp)<-c("12C",paste("13C_",seq(nLabel,(nLablgps+1)*nLabel,nLabel),sep=""),"12C_mz",paste("13C_",seq(nLabel,(nLablgps+1)*nLabel,nLabel),"_mz",sep=""),"rtmedmin","rtmedmax") #add identifiers to each peak in the group and label columns
     } else
     {
       rtmin<-min(as.numeric(C12peak[x,"rtmed_M"]),as.numeric(C12peak[x,"rtmed_Mplus"]))
       rtmax<-max(as.numeric(C12peak[x,"rtmed_M"]),as.numeric(C12peak[x,"rtmed_Mplus"]))
       gp<-c(C12peak[x,"M"],C12peak[x,"Mplus"],C12peak[x,"mzmed_M"],C12peak[x,"mzmed_Mplus"],rtmin,rtmax)
-      names(gp)<-c("12C","13C_6","12C_mz","13C_6_mz","rtmedmin","rtmedmax")
+      names(gp)<-c("12C",paste("13C_",nLabel,sep=""),"12C_mz",paste("13C_",nLabel,"_mz",sep=""),"rtmedmin","rtmedmax")
     }
     return(gp)
   })
@@ -104,7 +104,7 @@ function(xcmsSet2,mLabel=1.0033548,nLabel=6,mzppm=15,mzabs=0.005,rterror=1,resul
   out<-out[,c(setdiff(names(out),c("rtmedmin","rtmedmax")),"rtmedmin","rtmedmax")] #reorder columns
   clusterNumber = 1:length(out[ ,1])
   out=cbind(clusterNumber,out)
-  write.csv(out,file=file.path(resultsPath,paste(phenoTag,"Clusters_GroupNamesOnly.csv",sep="_")),row.names=F)
+  write.csv(out,file=file.path(resultsPath,paste(phenoTag,"nLabel",nLabel,"Clusters_GroupNamesOnly.csv",sep="_")),row.names=F)
   cat("\nBrief Output\n")
   print(head(out))
   #   out <<-out
@@ -124,5 +124,5 @@ function(xcmsSet2,mLabel=1.0033548,nLabel=6,mzppm=15,mzabs=0.005,rterror=1,resul
   mat<-do.call(rbind,mat) #bind previously generated cols together
   cat("\nBrief Output Matrix Form\n")
   print(head(mat))
-  write.csv(mat,file=file.path(resultsPath,paste(phenoTag,"Clusters_MatrixForm.csv",sep="_")),row.names=F)
+  write.csv(mat,file=file.path(resultsPath,paste(phenoTag,"nLabel",nLabel,"Clusters_MatrixForm.csv",sep="_")),row.names=F)
 }

@@ -1,4 +1,4 @@
-findC13cmpd_stat <-
+findLablcmpd_stat <-
 function(groupswithmzrange,rterror=1)
 {
   hitlist<-lapply(sort(unique(groupswithmzrange$rtmed)),function(x) ## make a sorted vector of peaks with unique retention times and apply function to it
