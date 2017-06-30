@@ -256,6 +256,7 @@ for(phenoTag in runList)
   postA = 0.05
   postfilter=F
   nLabel=6
+  mLabel=1.0033548
 
 
   if(tTestPairing)
@@ -270,7 +271,7 @@ for(phenoTag in runList)
     if(postfilter){
       cat("\nPostfilter alpha:",postA)
     }else cat("\n\n")
-    labeledPeaks_GroupPairing_tTest(dataSet2,mzppm,mzabs,rterror,resultsPath,phenoTag,phenotypes,preA,postA,value=val)
+    labeledPeaks_GroupPairing_tTest(dataSet2,nLabel=nLabel,mLabel=mLabel,mzppm,mzabs,rterror,resultsPath,phenoTag,phenotypes,preA,postA,value=val)
   }else
   {
     cat("\n\nPairing Groups Using Heuristic Pairing Algorithm (V2.3)\n")
