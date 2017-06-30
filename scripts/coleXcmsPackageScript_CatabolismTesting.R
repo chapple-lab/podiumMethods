@@ -100,7 +100,7 @@ peakwidth = c(4,20)
 snthresh = 5
 prefilter = c(3,150)
 integrate = 1
-nslaves = 16
+nslaves = 4
 
 #print centWave params
 cat("\n\ncentWave Parameters\n\nROI max M/z width in ppm:",ppm,"\nPeak width tolerance (min,max) in sec:",peakwidth,"\nS/N Threshold:",snthresh,"\nROI Prefilter (minNumPeaks,IntensityThresh):",prefilter)
