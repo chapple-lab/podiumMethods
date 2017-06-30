@@ -326,7 +326,7 @@ for(phenoTag in runList)
   }
 
   #output EICs, MS, and Tables for clusters and groups according to the Validation Parameters selected above
-  group_validationOutput(dataSet2,phenoTag,resultsPath,type,tTestFilter,value=val,clusters,Indx=idx,Rtindent=2,ppm)
+  group_nLabel_validationOutput(dataSet2,nLabel=nLabel,phenoTag,resultsPath,type,tTestFilter,value=val,clusters,Indx=idx,Rtindent=2,ppm)
 
 
 
