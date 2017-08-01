@@ -29,7 +29,7 @@ function(xcmsSet2,mzppm=15,mzabs=0.005,rterror=1,resultspath=NULL,phenoTag=NULL,
   conflictpair12<-sum(duplicated(plus12[,"M"]))+sum(duplicated(plus12[,"Mplus"])) ##repeat above for +12 path
   cat("conflictpair6: ",conflictpair6,"\n","conflictpair12: ",conflictpair12, "\n")
   cat("If any conflictpair is non-zero, reduce rterror or mzerror. \n")
-  serialpath<-plus6[which(plus6[,"Mplus"] %in% intersect(plus6[,"M"],plus6[,"Mplus"])),"M"] #M -> M+6 -> M+12 ##Return M peaks for Mplus peaks that are found in both M and Mplus cols (should represent M->M6->m12). Will fail if one M peak mapps to two distinct Mplus peaks
+  serialpath<-plus6[which(plus6[,"Mplus"] %in% intersect(plus6[,"M"],plus6[,"Mplus"])),"M"] #M -> M+6 -> M+12 ##Return M peaks for Mplus peaks that are found in both M and Mplus cols (ie. M peaks that have a M6->M12 Mplus peak) (should represent M->M6->m12, ie. all M peaks that also have a M12 peak). Will fail if one M peak mapps to two distinct Mplus peaks
   parallelpath<-intersect(plus6[,"M"],plus12[,"M"]) #M -> M+6; M -> M+12 ##Returns all M peaks that are in both plus6 and plus12 M list
   cat("Results from two paths are identical?", setequal(serialpath,parallelpath),"\n") #If FALSE, increase the rterror or mzerror.
   ##---end parameter optimization

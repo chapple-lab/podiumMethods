@@ -163,7 +163,7 @@ for(pheno in LoopPhenos)
     data = cbind(fullData[,1:7],Predictive=Predictability,data$Comp1,fullData[ ,-(1:7)])
   } else
   {
-    predData = cbind(data[predictors,],Predictive=Predictability[predictors])
+    predData = cbind(data[predictors,],Database_Matches=fullData[predictors,"Database_Matches"],Predictive=Predictability[predictors])
     data=cbind(data,Predictive=Predictability)
   }
 
@@ -184,8 +184,8 @@ for(pheno in LoopPhenos)
     {
       pwaIdx= which(pairwiseAnnos$Type==pheno)
       data= cbind(data[,1:2],pairwiseAnnos[pwaIdx,1:5],data[,-(1:6)])
-      predData= cbind(predData[,1:2],pairwiseAnnos[pwaIdx[predictors],1:5],predData[,-(1:6)])
-    } else
+      predData= cbind(predData[,1:2],pairwiseAnnos[pwaIdx[predictors],1:5],predData[,-(1:2)])
+    } else	
     {
       data = cbind(Type=rep(pheno,nrow(data)),data)
       predData = cbind(predData[,-ncol(predData)],Predictive=paste(predData$Predictive,pheno,sep="_"))

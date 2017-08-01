@@ -66,7 +66,7 @@ rtmin= 110
 
 #define paths to source data and results folder
 dataPath = "C:/0-TempData/Stem Feeding T1/Start"
-resultsPath = "X:/Labs/Chapple/0-Cole Wunderlich/Results/0-Stem Feeding/Test2"
+resultsPath = "X:/0-Cole Wunderlich/Results/0-Stem Feeding/Test4"
 if(!file.exists(resultsPath))
   dir.create(resultsPath)
 if(!comparison & !multi)
