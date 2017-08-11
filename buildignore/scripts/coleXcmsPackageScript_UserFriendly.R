@@ -14,6 +14,9 @@ require(coleXcmsMethods,quietly=T)
 #LOAD COLOR LIST!!!! (for EIC generation)
 data(LightColorList)
 
+
+#----------Set Program Parameters-----------#
+
 ##Enable Logging? Append or overwrite existing log?
 Log=T
 Append=F
@@ -67,6 +70,46 @@ rtmin= 110
 #define paths to source data and results folder
 dataPath = "C:/0-TempData/Stem Feeding T1/Start"
 resultsPath = "X:/0-Cole Wunderlich/Results/0-Stem Feeding/Test4"
+
+##Peak Picking (findPeaks.centWave)
+#Params for centWave ONLY
+ppm = 40
+peakwidth = c(4,20)
+snthresh = 5
+prefilter = c(3,150)
+integrate = 1
+nslaves = 16
+
+##Retention Time Alignment (retcor.obiwarp)
+response=100
+
+##Peak Grouping (group.density)
+minfrac=0
+minsamp=3
+mzwid=0.025
+bw=2
+max=50
+
+##Remove early groups? (see rem and rtmin settings above)
+
+##Peak Pairing (ie. find 13C labelled peaks) (C13peaks_GroupPairing_tTest)
+mzppm<-10 ## was 15
+mzabs<-0
+rterror<-2
+C12Fchng = 1.25 #heur only
+C13Fchng = 1.40 #heur only
+preA = 0.05 #stat only
+postA = 0.05 #stat and  postfilter=T only
+postfilter=F
+
+
+##Initialize Validation Parameters, including thresholds for profiling suspect groups (applied only to clustered groups)
+Fchng = 1.30 #heur only
+type = "valid"
+ppm2 = 15 #may need to change back to ppm, originally just overwrote previous ppm for centWave
+
+
+#---------Start Program-------------#
 if(!file.exists(resultsPath))
   dir.create(resultsPath)
 if(!comparison & !multi)
@@ -94,13 +137,6 @@ if(comparison)
 
 #-----------
 ###Load Data
-#Params for centWave ONLY
-ppm = 40
-peakwidth = c(4,20)
-snthresh = 5
-prefilter = c(3,150)
-integrate = 1
-nslaves = 16
 
 #print centWave params
 cat("\n\ncentWave Parameters\n\nROI max M/z width in ppm:",ppm,"\nPeak width tolerance (min,max) in sec:",peakwidth,"\nS/N Threshold:",snthresh,"\nROI Prefilter (minNumPeaks,IntensityThresh):",prefilter)
@@ -200,7 +236,6 @@ for(phenoTag in runList)
 
   ###Perform Rt correction and Grouping across ALL samples
   ##Rt Correction
-  response=100
   #align using WT sample???  currently center=NULL which causes sample with most peaks to be chosen
   cat("\n\nAligning Retention Times\nObiwarp Response:",response,"\n")
   dataSet2 = retcor.obiwarp(setList[[phenoTag]],response=response,plottype="deviation",distFunc="cor_opt",gapInit=0.3,gapExtend=2.4) #may want to change back to 10 resp
@@ -222,12 +257,6 @@ for(phenoTag in runList)
   #  group(res10RtcorData,minfrac=0.25,minsamp=2,bw=3,max=50,sleep=0.01)
   #  group(res10RtcorData,minfrac=0.25,minsamp=2,bw=5,max=50,sleep=0.01)
   cat("\n\nGrouping Detected Peaks\n")
-  minfrac=0
-  minsamp=3
-  mzwid=0.01
-  bw=2
-  max=50
-
   cat("\nMinimum Fraction of Samples Required for Peak Retention: ",minfrac,"\n")
   cat("Minimum Number of Samples Required for Peak Retention: ",minsamp,"\n")
   cat("M/z step: ",mzwid,"\nBandwidth of Guassian Kernel (stdev): ",bw,"\nMax groups per M/z step: ",max,"\n\n")
@@ -246,22 +275,11 @@ for(phenoTag in runList)
   }
 
   ###find C13 labelled peaks
-  #parameters
-  mzppm<-10 ## was 15
-  mzabs<-0
-  rterror<-2
-  C12Fchng = 1.25
-  C13Fchng = 1.40
-  preA = 0.05
-  postA = 0.05
-  postfilter=F
-
-
+  
   if(tTestPairing)
   {
 
     cat("\n\nFilling Peaks\n")
-	#FILLS PEAKS USING THE PROFILE MATRIX!!! (NOT the same method findPeaks.centWave uses)
     dataSet2 = fillPeaks(dataSet2,"chrom",nSlaves=nslaves,expand.mz=1,expand.rt=1,min.width.mz=0.005,min.width.rt=1) #note: Minwidth for rt is in seconds, scans taken about every .7sec on our machine, exp is factor based (ie 3 = 3X expansion)->1 will do nothing
     cat("\n\nPairing Groups Using t-Test Based Pairing Algorithm\n")
     cat("\nPairing Parameters\nmzppm:",mzppm,"\nmzabs:",mzabs,"\nrterror:",rterror,"\nData Type:",val,"\n")
@@ -289,12 +307,7 @@ for(phenoTag in runList)
     writeAllPeaks(dataSet2,resultsPath,name=paste(phenoTag,"Filled_Aligned_AllPeaks.csv",sep="_"))
 
   ###Validate/Filter Results
-  ##Initialize Validation Parameters, including thresholds for profiling suspect groups (applied only to clustered groups)
-  Fchng = 1.30
-  type = "valid"
-  ppm = 15
-
-  #Perform statistical filtration of paired groups
+   #Perform statistical filtration of paired groups
   if(postfilter&tTestFilter)
   {
     cat("\n\nFiltering groups using Welch's unpaired t-test\nData Type:",val,"\n")
@@ -325,7 +338,7 @@ for(phenoTag in runList)
   }
 
   #output EICs, MS, and Tables for clusters and groups according to the Validation Parameters selected above
-  group_validationOutput(dataSet2,phenoTag,resultsPath,type,tTestFilter,value=val,clusters,Indx=idx,Rtindent=2,ppm)
+  group_validationOutput(dataSet2,phenoTag,resultsPath,type,tTestFilter,value=val,clusters,Indx=idx,Rtindent=2,ppm2)
 
 
 
