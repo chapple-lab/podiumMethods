@@ -270,7 +270,7 @@ for(phenoTag in runList)
     if(postfilter){
       cat("\nPostfilter alpha:",postA)
     }else cat("\n\n")
-    C13peaks_GroupPairing_tTest(dataSet2,mzppm,mzabs,rterror,resultsPath,phenoTag,phenotypes,preA,postA,value=val)
+    C13peaks_GroupPairing_tTest(dataSet2,mzppm,mzabs,rterror,resultsPath,phenoTag,phenotypes,preA,value=val)
   }else
   {
     cat("\n\nPairing Groups Using Heuristic Pairing Algorithm (V2.3)\n")
