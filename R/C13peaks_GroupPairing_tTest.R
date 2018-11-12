@@ -17,12 +17,12 @@ function(xcmsSet2,mzppm=15,mzabs=0,rterror=1,resultspath=NULL,phenoTag=NULL,phen
   # filledSet = fillPeaks(xcmsSet2,"chrom",nSlaves=8,expand.mz=1,expand.rt=1,min.width.mz=0.005,min.width.rt=1)
   gpvals = groupval(xcmsSet2,method="medret",value=value)
   #   rownames(groups)<-groupnames(xcmsSet2) ##set group Id tags as row names
-  groupsplus6mzrange<-groupmzrange(groups,mzppm,mzabs,nC13=6) #add uppermz and lowermz of M+6 for each group
+  groupsplus6mzrange<-groupmzrange(groups,mzppm,mzabs,nLabel=6) #add uppermz and lowermz of M+6 for each group
   plus6<-findC13cmpd_stat(groupsplus6mzrange,rterror) #find M+6 C13 peaks
   #   plus6out <<-plus6
 
   ##--parameter optimization
-  groupsplus12mzrange<-groupmzrange(groups,mzppm,mzabs,nC13=12) #add uppermz and lowermz of M+12 for each peak
+  groupsplus12mzrange<-groupmzrange(groups,mzppm,mzabs,nLabel=12) #add uppermz and lowermz of M+12 for each peak
   plus12<-findC13cmpd_stat(groupsplus12mzrange,rterror)
   #optimize mzppm and mzabs so serialpath is identical to parallelpath
   conflictpair6<-sum(duplicated(plus6[,"M"]))+sum(duplicated(plus6[,"Mplus"])) ##determine number of peaks that occur multiple times in the same list (M list or M+6), does NOT look at multiple occurrences across lists  (ie. One in both M and M+6 does NOT count)
