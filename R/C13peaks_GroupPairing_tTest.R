@@ -1,5 +1,5 @@
 C13peaks_GroupPairing_tTest <-
-function(xcmsSet2,mzppm=15,mzabs=0,rterror=1,resultspath=NULL,phenoTag=NULL,phenotypes=NULL,preA=0.05,value="maxo",overide=F)
+function(xcmsSet2,mzppm=15,mzabs=0.005,rterror=1,resultspath=NULL,phenoTag=NULL,phenotypes=NULL,preA=0.05,postA=0.05,value="maxo",overide=F)
 {
   check = is.na(xcmsSet2@filled[1])
   if(check&!overide)
@@ -17,19 +17,19 @@ function(xcmsSet2,mzppm=15,mzabs=0,rterror=1,resultspath=NULL,phenoTag=NULL,phen
   # filledSet = fillPeaks(xcmsSet2,"chrom",nSlaves=8,expand.mz=1,expand.rt=1,min.width.mz=0.005,min.width.rt=1)
   gpvals = groupval(xcmsSet2,method="medret",value=value)
   #   rownames(groups)<-groupnames(xcmsSet2) ##set group Id tags as row names
-  groupsplus6mzrange<-groupmzrange(groups,mzppm,mzabs,nLabel=6) #add uppermz and lowermz of M+6 for each group
+  groupsplus6mzrange<-groupmzrange(groups,mzppm,mzabs,nC13=6) #add uppermz and lowermz of M+6 for each group
   plus6<-findC13cmpd_stat(groupsplus6mzrange,rterror) #find M+6 C13 peaks
   #   plus6out <<-plus6
 
   ##--parameter optimization
-  groupsplus12mzrange<-groupmzrange(groups,mzppm,mzabs,nLabel=12) #add uppermz and lowermz of M+12 for each peak
+  groupsplus12mzrange<-groupmzrange(groups,mzppm,mzabs,nC13=12) #add uppermz and lowermz of M+12 for each peak
   plus12<-findC13cmpd_stat(groupsplus12mzrange,rterror)
   #optimize mzppm and mzabs so serialpath is identical to parallelpath
   conflictpair6<-sum(duplicated(plus6[,"M"]))+sum(duplicated(plus6[,"Mplus"])) ##determine number of peaks that occur multiple times in the same list (M list or M+6), does NOT look at multiple occurrences across lists  (ie. One in both M and M+6 does NOT count)
   conflictpair12<-sum(duplicated(plus12[,"M"]))+sum(duplicated(plus12[,"Mplus"])) ##repeat above for +12 path
   cat("conflictpair6: ",conflictpair6,"\n","conflictpair12: ",conflictpair12, "\n")
   cat("If any conflictpair is non-zero, reduce rterror or mzerror. \n")
-  serialpath<-plus6[which(plus6[,"Mplus"] %in% intersect(plus6[,"M"],plus6[,"Mplus"])),"M"] #M -> M+6 -> M+12 ##Return M peaks for Mplus peaks that are found in both M and Mplus cols (ie. M peaks that have a M6->M12 Mplus peak) (should represent M->M6->m12, ie. all M peaks that also have a M12 peak). Will fail if one M peak mapps to two distinct Mplus peaks
+  serialpath<-plus6[which(plus6[,"Mplus"] %in% intersect(plus6[,"M"],plus6[,"Mplus"])),"M"] #M -> M+6 -> M+12 ##Return M peaks for Mplus peaks that are found in both M and Mplus cols (should represent M->M6->m12). Will fail if one M peak mapps to two distinct Mplus peaks
   parallelpath<-intersect(plus6[,"M"],plus12[,"M"]) #M -> M+6; M -> M+12 ##Returns all M peaks that are in both plus6 and plus12 M list
   cat("Results from two paths are identical?", setequal(serialpath,parallelpath),"\n") #If FALSE, increase the rterror or mzerror.
   ##---end parameter optimization

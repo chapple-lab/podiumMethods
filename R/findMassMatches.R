@@ -1,6 +1,6 @@
 
 #Note, conversions and massList must be data frames
-findMassMatches = function(rawList,refList,ppm=20,rtWind=0,rawmz="[M-H]",rawrt="Rt",refmz="[M-H]",refrt="Rt",short=T,shortList=c(rawmz,rawrt,"default"),shortList2=c(refmz,refrt))
+findMassMatches = function(rawList,refList,ppm=20,rtWind=0,rawmz="[M-H]",rawrt="Rt",refmz="[M-H]",refrt="Rt",short=T,shortList=c(rawmz,rawrt,"default"),shortList2=shortList)
 {
 
   results=NULL
@@ -43,7 +43,7 @@ findMassMatches = function(rawList,refList,ppm=20,rtWind=0,rawmz="[M-H]",rawrt="
           else
             result=cbind(metab[,shortList],match="=>",ppm=ppm2,refList[indx[idx],shortList2],row.names=NULL)
       else
-        result=cbind(metab,match="=>",ppm=ppm2,refList[indx[idx],],row.names=NULL)
+        result=cbind(metab,match="=>",refList[indx[idx],],row.names=NULL)
 
       results = rbind(results,result)
 
