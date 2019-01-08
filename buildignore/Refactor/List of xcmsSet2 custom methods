@@ -1,0 +1,23 @@
+List of xcmsSet2 custom functions
+
+show
+
+c()
+
+split
+
+convert (to regular object)
+
+gvals environment-based value passing for mpi
+
+getEIC (custom??)
+
+rtexp2
+
+getSpec (custom ??)
+
+peakTable (custom??)
+
+diffreport (custom??)
+
+diffreport2
