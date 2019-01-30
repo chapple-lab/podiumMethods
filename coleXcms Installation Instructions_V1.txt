@@ -1,0 +1,32 @@
+coleXcms Installation Instructions
+
+1. Install R-3.0.2
+  - https://cran.r-project.org/bin/windows/base/old/3.0.2/
+  - (link is for windows binaries)
+
+2. Install R Tools
+  - https://cran.r-project.org/bin/windows/Rtools/
+  - Install version 31: https://cran.r-project.org/bin/windows/Rtools/Rtools31.exe
+  - Make sure choose to add R Tools to your PATH during install
+  - R Tools is necessary in order to install packages from source that contain non-R Code
+    (in this case the coleXcms package)
+
+3. Install XCMS via Bioconductor
+  - Note: This step is OPTIONAL but is an easy way of automatically installing all of the
+    necessary dependencies for the coleXcms package (as they are the same as for the XCMS package)
+  - This requires the usage of the old installation method (see following)
+  - Open R and run > source('http://www.bioconductor.org/biocLite.R')
+  - Next run > biocLite('xcms')
+  - XCMS and its dependencies should now be installed
+
+4. Install the coleXcms package
+  - With R open run > install.packages('C:/path/to/tarball/coleXcms_1.1.0.tar.gz',type='source',repos=NULL)
+
+5. Install the coleXcmsMethods package
+  - Open R and run > install.packages('C:/path/to/tarball/coleXcmsMethods_0.1.1.tar.gz',type='source',repos=NULL)
+
+You are now ready to run!  You can use the provided script which will automatically load the required packages
+and analyze any data you provide.  
+
+If you want to run coleXcms with your own script, you will need to first load the coleXcms and coleXcmsMethods
+packages before starting your analysis.
