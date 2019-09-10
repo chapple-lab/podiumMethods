@@ -1,12 +1,12 @@
-Package: coleXcmsMethods
-Version: 1.0.1
-Date: 2017-05-25
+Package: coleXcmsMethods2
+Version: 1.1.0
+Date: 2019-09-09
 Title: This package contains methods not included in coleXcms.
 Author: Cole Wunderlich
 Maintainer: Cole Wunderlich <cole.wunderlich+compbio@gmail.com>
 Depends: R (>= 2.14.0), methods, coleXcms (>= 1.1.0)
 Suggests: multtest
 Description: Contains methods that are not directly involved in modifying/extending XCMS (ie. non-xcmsSet2 specific methods).  These methods will eventually get merged
-			 together with the coleXcms package.
+			 together with the coleXcms package. Name changed to 2 due to inclusion of nLabel and mLabel parameters.
 License: GPL (>= 2)
 LazyData: true
