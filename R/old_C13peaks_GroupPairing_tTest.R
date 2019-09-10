@@ -1,4 +1,4 @@
-C13peaks_GroupPairing_tTest <-
+old_C13peaks_GroupPairing_tTest <-
 function(xcmsSet2,mzppm=15,mzabs=0,rterror=1,resultspath=NULL,phenoTag=NULL,phenotypes=NULL,preA=0.05,value="maxo",overide=F)
 {
   check = is.na(xcmsSet2@filled[1])
