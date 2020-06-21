@@ -1,10 +1,6 @@
-group_printMS <-
-function(xcmsSet2=NULL,pairedGroups_matrix=NULL,clusters=NULL,path,type=c("single","average","multiple"),mzexp=10,perstdev=1.25,rtindent=1.25,nLabel=6)
+old_group_printMS <-
+function(xcmsSet2=NULL,pairedGroups_matrix=NULL,clusters=NULL,path,type=c("single","average","multiple"),mzexp=10,perstdev=1.25,rtindent=1.25)
 {
-  ##NOTE: Following comments copied from group_printEICs
-  #determine rt bounds as rtmin_med and rtmax_med across one representative peak from each group
-  #determine MS slice bounds as +/- perstdev*stdev arround median rt
-  
   #get names of 12C and 13C samples
   sampleNames = rownames(xcmsSet2@phenoData)
 	lastCol = ncol(xcmsSet2@phenoData)
@@ -18,9 +14,6 @@ function(xcmsSet2=NULL,pairedGroups_matrix=NULL,clusters=NULL,path,type=c("singl
   }
   C12sampleidx = which(sampnames(xcmsSet2) %in% C12sampleNames)
 	C13sampleidx = which(sampnames(xcmsSet2) %in% C13sampleNames)
-	
-	#determine name for +nLabel Group
-	labeled_once = paste0("13C_",nLabel)
 
     #get m/z and rt values for each group
     ##switched to using my groupComposite instead of the groups() values stored in paired groups matrix as they do not contain
@@ -37,7 +30,7 @@ function(xcmsSet2=NULL,pairedGroups_matrix=NULL,clusters=NULL,path,type=c("singl
       basegp = pairedGroups_matrix[which(pairedGroups_matrix[ ,"clusterNumber"]==j & pairedGroups_matrix[ ,"iso"]=="12C"), ]
       baseidx = which(groupnames(xcmsSet2)==basegp$groupname)
       # basegp = gpvals[which(gpvals[ ,"group"]==basegp$groupname), ]
-      C13gp = pairedGroups_matrix[which(pairedGroups_matrix[ ,"clusterNumber"]==j & pairedGroups_matrix[ ,"iso"]==labeled_once), ]
+      C13gp = pairedGroups_matrix[which(pairedGroups_matrix[ ,"clusterNumber"]==j & pairedGroups_matrix[ ,"iso"]=="13C_6"), ]
       # C13gp = gpvals[which(gpvals[ ,"group"]==C13gp$groupname), ]
 
       #determine mz range

@@ -1,5 +1,5 @@
-group_printEICs <-
-function(xcmsSet2=NULL,pairedGroups_matrix=NULL,clusters=NULL,path,rtrng=100,ppm=50,perstdev=1.25,rtindent=NULL,output=F,nLabel=nLabel) #groupComposite=Null
+old_group_printEICs <-
+function(xcmsSet2=NULL,pairedGroups_matrix=NULL,clusters=NULL,path,rtrng=100,ppm=50,perstdev=1.25,rtindent=NULL,output=F) #groupComposite=Null
 {
 
   ##generate indicies for groups with suspect peaks, then get EIC's for all of the peaks in each group
@@ -170,7 +170,6 @@ function(xcmsSet2=NULL,pairedGroups_matrix=NULL,clusters=NULL,path,rtrng=100,ppm
     }
 
     #plot 13C_C12 and 13C_6
-    legendNames = c("C12","C13",paste0("C12_+",nLabel),paste0("C13_+",nLabel),"C12_+More","C13_+More")
     for(sname in C13sampleNames)
     {
 
@@ -204,9 +203,8 @@ function(xcmsSet2=NULL,pairedGroups_matrix=NULL,clusters=NULL,path,rtrng=100,ppm
     }
 
 
-    legend("topright",legendNames,col = c("black","green","red","blue","purple","brown"),lty=1,ncol=3,xpd=T,seg.len=.5,cex=.9,x.intersp=.45,y.intersp=.75,inset=c(-0.03,-.06)) #lty=1,ncol=3,xpd=T,seg.len=.5,cex=.75,xjust=0.5,text.width=1.6,x.intersp=.75,y.intersp=.75,inset=c(0,-.02)
+    legend("topright",c("C12","C13","C12_+6","C13_+6","C12_+More","C13_+More"),col = c("black","green","red","blue","purple","brown"),lty=1,ncol=3,xpd=T,seg.len=.5,cex=.75,x.intersp=.45,y.intersp=.75,inset=c(-0.03,-.06)) #lty=1,ncol=3,xpd=T,seg.len=.5,cex=.75,xjust=0.5,text.width=1.6,x.intersp=.75,y.intersp=.75,inset=c(0,-.02)
     # mtext(paste("msRtmin:",msRtmin,"msRtmax:",msRtmax,sep=" "),1)
-    #was cex=.75
     dev.off()
     x=x+numGroups
 	#cat("Cluster:",j,"\n")

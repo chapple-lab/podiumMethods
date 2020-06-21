@@ -1,5 +1,5 @@
 group_validationOutput <-
-function(xcmsSet2=NULL,pheno=NULL,resultsPath=NULL,type=c("valid","suspect"),tTest=F,value=NULL,clusters=NULL,Indx=NULL,Rtindent=2,ppm=NULL,overide=F,tag="NONE")
+function(xcmsSet2=NULL,pheno=NULL,resultsPath=NULL,type=c("valid","suspect"),tTest=F,value=NULL,clusters=NULL,Indx=NULL,Rtindent=2,ppm=NULL,overide=F,tag="NONE",nLabel=6)
 #   tresults=NULL
 {
 	#output EIC, MS, and Table
@@ -29,19 +29,19 @@ function(xcmsSet2=NULL,pheno=NULL,resultsPath=NULL,type=c("valid","suspect"),tTe
   {
     if(!is.null("ppm"))
     {
-      path=file.path(resultsPath,paste(tag,type,filter,pheno,value,"ppm",ppm,sep="_"))
+      path=file.path(resultsPath,paste(tag,type,filter,pheno,"nLabel",nLabel,value,"ppm",ppm,sep="_"))
     }
     else
     {
-      path=file.path(resultsPath,paste(tag,type,filter,pheno,value,sep="_"))
+      path=file.path(resultsPath,paste(tag,type,filter,pheno,"nLabel",nLabel,value,sep="_"))
     }
   }else if(!is.null("ppm"))
   {
-    path=file.path(resultsPath,paste(type,filter,pheno,value,"ppm",ppm,sep="_"))
+    path=file.path(resultsPath,paste(type,filter,pheno,"nLabel",nLabel,value,"ppm",ppm,sep="_"))
   }
   else
   {
-    path=file.path(resultsPath,paste(type,filter,pheno,value,sep="_"))
+    path=file.path(resultsPath,paste(type,filter,pheno,"nLabel",nLabel,value,sep="_"))
   }
   if(file.exists(path))
   {
@@ -54,17 +54,17 @@ function(xcmsSet2=NULL,pheno=NULL,resultsPath=NULL,type=c("valid","suspect"),tTe
   dir.create(path)
 
 # 	pairedGroups = read.csv(file.path(resultsPath,paste(pheno,"Clusters_GroupNamesOnly.csv",sep="_")),check.names=F,stringsAsFactors=F)
-  pairedGroups_matrix = read.csv(file.path(resultsPath,paste(pheno,"Clusters_MatrixForm.csv",sep="_")),check.names=F,stringsAsFactors=F)
+  pairedGroups_matrix = read.csv(file.path(resultsPath,paste(pheno,"nLabel",nLabel,"Clusters_MatrixForm.csv",sep="_")),check.names=F,stringsAsFactors=F)
 	# groupComposite = read.csv(file=file.path(resultsPath,paste(pheno,"GroupComposite_unfilled.csv",sep="_")),check.names=F,stringsAsFactors=F)
 
 
 	#print EIC
 	cat("\n\nGenerating EICs for",type,"Clusters in",pheno,"\n")
-    group_printEICs(xcmsSet2,pairedGroups_matrix,clusters,path,rtrng=24,ppm=ppm,rtindent=Rtindent,output=F) #Default ppm=50,rtrng used to be 5
+    group_printEICs(xcmsSet2,pairedGroups_matrix,clusters,path,rtrng=24,ppm=ppm,rtindent=Rtindent,output=F,nLabel=nLabel) #Default ppm=50,rtrng used to be 5
 
 	#print MS
 	cat("\n\nGenerating MS for",type,"Clusters in",pheno,"\n")
-    group_printMS(xcmsSet2,pairedGroups_matrix,clusters,path,type="multiple",rtindent=Rtindent)
+    group_printMS(xcmsSet2,pairedGroups_matrix,clusters,path,type="multiple",rtindent=Rtindent,nLabel=nLabel)
 
 	#print tables according to analysis parameters
 	cat("\n\nGenerating Tables for",type,"Clusters in",pheno,"\n")
@@ -80,19 +80,19 @@ function(xcmsSet2=NULL,pheno=NULL,resultsPath=NULL,type=c("valid","suspect"),tTe
     {
       if(tTest==T)
       {
-        write.csv(matx,file=file.path(resultsPath,paste(tag,pheno,type,"Clusters_tTestFilter",paste(value,".csv",sep=""),sep="_")),row.names=F)
-        write.csv(gmatx,file=file.path(resultsPath,paste(tag,pheno,type,"Groups_tTestFilter",paste(value,".csv",sep=""),sep="_")),row.names=F)
+        write.csv(matx,file=file.path(resultsPath,paste(tag,pheno,"nLabel",nLabel,type,"Clusters_tTestFilter",paste(value,".csv",sep=""),sep="_")),row.names=F)
+        write.csv(gmatx,file=file.path(resultsPath,paste(tag,pheno,"nLabel",nLabel,type,"Groups_tTestFilter",paste(value,".csv",sep=""),sep="_")),row.names=F)
       } else {
-        write.csv(matx,file=file.path(resultsPath,paste(tag,pheno,type,"Clusters_HeuristicFilter",paste(value,".csv",sep=""),sep="_")),row.names=F)
-        write.csv(gmatx,file=file.path(resultsPath,paste(tag,pheno,type,"Groups_HeuristicFilter",paste(value,".csv",sep=""),sep="_")),row.names=F)
+        write.csv(matx,file=file.path(resultsPath,paste(tag,pheno,"nLabel",nLabel,type,"Clusters_HeuristicFilter",paste(value,".csv",sep=""),sep="_")),row.names=F)
+        write.csv(gmatx,file=file.path(resultsPath,paste(tag,pheno,"nLabel",nLabel,type,"Groups_HeuristicFilter",paste(value,".csv",sep=""),sep="_")),row.names=F)
       }
     }else if(tTest==T)
 		{
-			write.csv(matx,file=file.path(resultsPath,paste(pheno,type,"Clusters_tTestFilter",paste(value,".csv",sep=""),sep="_")),row.names=F)
-			write.csv(gmatx,file=file.path(resultsPath,paste(pheno,type,"Groups_tTestFilter",paste(value,".csv",sep=""),sep="_")),row.names=F)
+			write.csv(matx,file=file.path(resultsPath,paste(pheno,"nLabel",nLabel,type,"Clusters_tTestFilter",paste(value,".csv",sep=""),sep="_")),row.names=F)
+			write.csv(gmatx,file=file.path(resultsPath,paste(pheno,"nLabel",nLabel,type,"Groups_tTestFilter",paste(value,".csv",sep=""),sep="_")),row.names=F)
 		} else {
-			write.csv(matx,file=file.path(resultsPath,paste(pheno,type,"Clusters_HeuristicFilter",paste(value,".csv",sep=""),sep="_")),row.names=F)
-			write.csv(gmatx,file=file.path(resultsPath,paste(pheno,type,"Groups_HeuristicFilter",paste(value,".csv",sep=""),sep="_")),row.names=F)
+			write.csv(matx,file=file.path(resultsPath,paste(pheno,"nLabel",nLabel,type,"Clusters_HeuristicFilter",paste(value,".csv",sep=""),sep="_")),row.names=F)
+			write.csv(gmatx,file=file.path(resultsPath,paste(pheno,"nLabel",nLabel,type,"Groups_HeuristicFilter",paste(value,".csv",sep=""),sep="_")),row.names=F)
 		}
 # 	}else if(type=="valid")
 # 	{
