@@ -45,7 +45,8 @@ function(xcmsSet2=NULL,plus6,resultsPath,phenoTag,phenotypes=NULL,alpha=0.05,pea
 
   #initialize vars
   #note: use =NULL instead of mat.or.vec(0,1) if you want TRUE/FALSE in the out put instead of 1/0
-  tTests = mat.or.vec(length(idx1),length(phenotypes))
+  tTests = matrix(nrow=length(idx1), ncol=length(phenotypes)) #handle case with one genotype by ensuring always a matrix
+  #tTests = mat.or.vec(length(idx1),length(phenotypes))
   validGroups = vector(mode = "list", length=length(phenotypes))
   peakType1data = vector(mode = "list", length=length(phenotypes))
   peakType2data = vector(mode = "list", length=length(phenotypes))
@@ -91,7 +92,7 @@ function(xcmsSet2=NULL,plus6,resultsPath,phenoTag,phenotypes=NULL,alpha=0.05,pea
 
 
     #store/append results for this phenotype
-    tTests[,j] = tTest
+    tTests[,j] = tTest #this would fail with one genotype under old code because mat.or.vec would procude a vector, making index invalid
     validGroups[[j]] = as.numeric(tTest<=alpha)
     peakType1data[[j]] = do.call(rbind,peakList1)
     peakType2data[[j]] = do.call(rbind,peakList2)#cbind(peakType2data,matx)
