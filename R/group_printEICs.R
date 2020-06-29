@@ -5,7 +5,23 @@ function(xcmsSet2=NULL,pairedGroups_matrix=NULL,clusters=NULL,path,rtrng=100,ppm
   ##generate indicies for groups with suspect peaks, then get EIC's for all of the peaks in each group
   clusters=sort(clusters)
   groups = pairedGroups_matrix[which(pairedGroups_matrix[ ,"clusterNumber"]%in%clusters),"groupname"] #names of all groups in suspect clusters
-  EIC = getEIC(xcmsSet2,rtrange=rtrng,groupidx=groups,rt="corrected",mzExpMeth="ppm",ppm=ppm)
+  
+  #handle case where ppm=NULL -> use other expansion method (old method from xcms)
+  if(!is.null(ppm))
+  {
+    #takes average of the mz values from each sample in the group and then does a symmetric ppm expansion around that value
+    #since no mzrange is provided, it will use the group data from xcmsSet2
+    EIC = getEIC(xcmsSet2,rtrange=rtrng,groupidx=groups,rt="corrected",mzExpMeth="ppm",ppm=ppm)
+   
+  }
+  else
+  {
+    #picks mz limits based on smallest mzmin and largest mzmax across all samples (this is the default/only method present in 
+    #the vanilla xcms package)
+    #since no mzrange is provided, it will use the group data from xcmsSet2
+    EIC = getEIC(xcmsSet2,rtrange=rtrng,groupidx=groups,rt="corrected",mzExpMeth="minMax")
+  }
+  
   if(output)
   {
     cat("\n\nEICs and Groups Output to Global Enviroment\n")
