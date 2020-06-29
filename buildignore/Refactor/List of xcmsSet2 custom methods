@@ -10,7 +10,7 @@ convert (to regular object)
 
 gvals environment-based value passing for mpi
 
-getEIC (custom??)
+getEIC (custom??, yes adds ppm parameter, may add more haven't fully looked at)
 
 rtexp2
 
@@ -18,6 +18,6 @@ getSpec (custom ??)
 
 peakTable (custom??)
 
-diffreport (custom??)
+diffreport (custom??, yes added ppm parameter, groupvals pass in, and a few other tweaks)
 
 diffreport2
