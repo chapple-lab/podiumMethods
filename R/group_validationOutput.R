@@ -33,7 +33,7 @@ function(xcmsSet2=NULL,pheno=NULL,resultsPath=NULL,type=c("valid","suspect"),tTe
     }
     else
     {
-      path=file.path(resultsPath,paste(tag,type,filter,pheno,"nLabel",nLabel,value,sep="_"))
+      path=file.path(resultsPath,paste(tag,type,filter,pheno,"nLabel",nLabel,value,"mzMinMax",sep="_"))
     }
   }else if(!is.null("ppm"))
   {
@@ -41,7 +41,7 @@ function(xcmsSet2=NULL,pheno=NULL,resultsPath=NULL,type=c("valid","suspect"),tTe
   }
   else
   {
-    path=file.path(resultsPath,paste(type,filter,pheno,"nLabel",nLabel,value,sep="_"))
+    path=file.path(resultsPath,paste(type,filter,pheno,"nLabel",nLabel,value,"mzMinMax",sep="_"))
   }
   if(file.exists(path))
   {
