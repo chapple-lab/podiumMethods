@@ -27,7 +27,7 @@ function(xcmsSet2=NULL,pheno=NULL,resultsPath=NULL,type=c("valid","suspect"),tTe
 
   if(tag!="NONE")
   {
-    if(!is.null("ppm"))
+    if(!is.null(ppm))
     {
       path=file.path(resultsPath,paste(tag,type,filter,pheno,"nLabel",nLabel,value,"ppm",ppm,sep="_"))
     }
@@ -35,7 +35,7 @@ function(xcmsSet2=NULL,pheno=NULL,resultsPath=NULL,type=c("valid","suspect"),tTe
     {
       path=file.path(resultsPath,paste(tag,type,filter,pheno,"nLabel",nLabel,value,"mzMinMax",sep="_"))
     }
-  }else if(!is.null("ppm"))
+  }else if(!is.null(ppm))
   {
     path=file.path(resultsPath,paste(type,filter,pheno,"nLabel",nLabel,value,"ppm",ppm,sep="_"))
   }
@@ -43,6 +43,7 @@ function(xcmsSet2=NULL,pheno=NULL,resultsPath=NULL,type=c("valid","suspect"),tTe
   {
     path=file.path(resultsPath,paste(type,filter,pheno,"nLabel",nLabel,value,"mzMinMax",sep="_"))
   }
+  
   if(file.exists(path))
   {
     catch=unlink(path,recursive = T) #delete contents of existing folder in prep for writing new data
@@ -52,7 +53,8 @@ function(xcmsSet2=NULL,pheno=NULL,resultsPath=NULL,type=c("valid","suspect"),tTe
     }
   }
   dir.create(path)
-
+  cat("\nOutput Directory:",path,"\n")
+  
 # 	pairedGroups = read.csv(file.path(resultsPath,paste(pheno,"Clusters_GroupNamesOnly.csv",sep="_")),check.names=F,stringsAsFactors=F)
   pairedGroups_matrix = read.csv(file.path(resultsPath,paste(pheno,"nLabel",nLabel,"Clusters_MatrixForm.csv",sep="_")),check.names=F,stringsAsFactors=F)
 	# groupComposite = read.csv(file=file.path(resultsPath,paste(pheno,"GroupComposite_unfilled.csv",sep="_")),check.names=F,stringsAsFactors=F)
