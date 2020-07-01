@@ -16,7 +16,7 @@ rtexp2
 
 getSpec (custom ??)
 
-peakTable (custom??)
+peakTable (custom??, don't think so, don't know why I defined this for xcmsSet2 since it shoudld have been inhereted)
 
 diffreport (custom??, yes added ppm parameter, groupvals pass in, and a few other tweaks)
 
