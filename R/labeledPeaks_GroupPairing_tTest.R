@@ -1,5 +1,5 @@
 labeledPeaks_GroupPairing_tTest <-
-function(xcmsSet2,nLabel=6,mzppm=15,mzabs=0.005,rterror=1,resultspath=NULL,phenoTag=NULL,phenotypes=NULL,preA=0.05,postA=0.05,value="maxo",mLabel=1.0033548,overide=F)
+function(xcmsSet2,nLabel=6,mzppm=15,mzabs=0,rterror=1,resultspath=NULL,phenoTag=NULL,phenotypes=NULL,preA=0.05,postA=0.05,value="maxo",mLabel=1.0033548,overide=F)
 {
   check = is.na(xcmsSet2@filled[1])
   if(check&!overide)
@@ -30,8 +30,8 @@ function(xcmsSet2,nLabel=6,mzppm=15,mzabs=0.005,rterror=1,resultspath=NULL,pheno
   conflictpair12<-sum(duplicated(plus2N[,"M"]))+sum(duplicated(plus2N[,"Mplus"])) ##repeat above for +12 path
   cat("conflictpair6: ",conflictpair6,"\n","conflictpair12: ",conflictpair12, "\n")
   cat("If any conflictpair is non-zero, reduce rterror or mzerror. \n")
-  serialpath<-plusN[which(plusN[,"Mplus"] %in% intersect(plusN[,"M"],plusN[,"Mplus"])),"M"] #M -> M+6 -> M+12 ##Return M peaks for Mplus peaks that are found in both M and Mplus cols (should represent M->M6->m12). Will fail if one M peak mapps to two distinct Mplus peaks
-  parallelpath<-intersect(plusN[,"M"],plus2N[,"M"]) #M -> M+6; M -> M+12 ##Returns all M peaks that are in both plusN and plus2N M list
+  serialpath<-plusN[which(plusN[,"Mplus"] %in% intersect(plusN[,"M"],plusN[,"Mplus"])),"M"] #Get peaks that have an Mplus peak that also has its own Mplus peak #M -> M+6 -> M+12 ##Return M peaks for Mplus peaks that are found in both M and Mplus cols (should represent M->M6->m12). Will fail if one M peak mapps to two distinct Mplus peaks
+  parallelpath<-intersect(plusN[,"M"],plus2N[,"M"]) #Get peaks that have a PlusN and a Plus2N peak #M -> M+6; M -> M+12 ##Returns all M peaks that are in both plusN and plus2N M list
   cat("Results from two paths are identical?", setequal(serialpath,parallelpath),"\n") #If FALSE, increase the rterror or mzerror.
   ##---end parameter optimization
 
