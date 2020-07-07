@@ -12,7 +12,7 @@ gvals environment-based value passing for mpi
 
 getEIC (custom??, yes adds ppm parameter, may add more haven't fully looked at)
 
-rtexp2
+retexp2
 
 getSpec (custom ??)
 
@@ -21,3 +21,5 @@ peakTable (custom??, don't think so, don't know why I defined this for xcmsSet2 
 diffreport (custom??, yes added ppm parameter, groupvals pass in, and a few other tweaks)
 
 diffreport2
+
+fillPeaks (added params for expanding mz and rt as well as min mz and rt widths)
