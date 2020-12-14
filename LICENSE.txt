@@ -1,4 +1,4 @@
-Copyright © Cole Wunderlich
+Copyright © Cole Wunderlich 2013-2020
 
 All materials governed by the GNU GPL version 3 or any later version:
 
