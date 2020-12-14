@@ -1,13 +1,15 @@
 Package: podiumMethods
 Version: 1.2.0
-Date: 2019-12-14
-Title: This package contains methods not included in the PODIUM package.
+Date: 2020-12-14
+Title: Package of Support Methods for the Package PODIUM  
 Author: Cole Wunderlich
 Maintainer: Cole Wunderlich <cole.wunderlich+compbio@gmail.com>
 Depends: R (>= 2.14.0), methods, podium (>= 1.1.0)
 Suggests: multtest
-Description: Contains methods that are not directly involved in modifying/extending XCMS (ie. non-xcmsSet2 specific methods).  These methods may eventually get merged
-			 together with the podium package.
-License: GPL (>= 2) + file LICENSE
+Description: This package contains methods not included in the PODIUM package. In conjunction with the PODIUM package, adds 
+			 functional support for analysis of stable-isotope labeling data where the labeled portion of the tracer molecule remains intact. 
+			 Contains methods that are not directly involved in modifying/extending XCMS (ie. non-xcmsSet2 specific methods).  
+			 These methods may eventually get merged together with the podium package.
+License: GPL (>= 3) + file LICENSE
 URL: https://github.com/chapple-lab/podiumMethods , https://github.com/chapple-lab/podium
 LazyData: true
